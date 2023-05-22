@@ -1,0 +1,98 @@
+To save you typing, this file contains the code that you need to add to the 
+snake game to make it controllable by gestures.
+
+Connect the Webcam to the Game
+=============================================================================
+
+Add this line at the top of sketch.js:
+--------------------------------------
+
+let label = "waiting..."
+
+
+Add this code to the setup() function:
+--------------------------------------
+
+  // Capture the video feed from the camera
+  setupVideo()
+  
+  
+Add this code to the draw() function:
+-------------------------------------
+  
+  // Show the video image
+  image(video,0,0, 160, 120)  
+  
+  
+Load our Trained Model
+=============================================================================
+
+Add this line into the preload() function.  
+Note that the part in green comes from the 
+model that you uploaded on Teachable Machine.  
+You need to change this to match the link 
+you copied earlier.
+---------------------------------------------
+
+  classifier = ml5.imageClassifier('https://teachablemachine.withgoogle.com/models/rha8jGD8e/model.json')  
+  
+Classify Images
+=============================================================================
+
+Add this code to the setup() function:
+--------------------------------------
+
+  // Classify it
+  classifyVideo()  
+  
+  
+Add this new function, just after the setup() function:
+-------------------------------------------------------
+
+// This function is called when we have a classification
+function videoClassified(result) {
+  // Store the label
+  label = result
+  
+  
+  // Classify the next video frame
+  classifyVideo();  
+}
+
+
+Add this code to the draw() function:
+-------------------------------------
+
+
+  // Show the classification label
+  textSize(24)
+  text(label, 10, 100)
+  
+Control the Snake
+=============================================================================
+
+Add this code to the videoClassified() function you added earlier:
+------------------------------------------------------------------
+
+  // Move the snake according to the classification
+  controlSnake()
+  
+  
+  
+Add this new function:
+----------------------
+
+// This function checks the classification of the image an moves the snake accordingly
+function controlSnake() {
+  if (label == 'left') {
+    snake.setDir(-1, 0);
+  } else if (label == 'right') {
+    snake.setDir(1, 0);
+  } else if (label == 'down') {
+    snake.setDir(0, 1);
+  } else if (label == 'up') {
+    snake.setDir(0, -1);
+  }
+}
+  
+  
